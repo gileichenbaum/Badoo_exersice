@@ -3,7 +3,6 @@ package com.app.badoo.myapplication.infrastucture;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by GIL on 13/05/2016 for My Application.
@@ -13,6 +12,7 @@ public class ConversionList {
     private static final String TAG = ConversionList.class.getSimpleName();
     private final HashMap<String,Double> mConvertToMap = new HashMap<>();
     private final String mFrom;
+    private String mDefaultConversion;
 
     public ConversionList(final String from) {
         mFrom = from;
@@ -21,6 +21,9 @@ public class ConversionList {
 
     public void add(final Conversion conversion) {
         mConvertToMap.put(conversion.mTo,conversion.mRate);
+        if (mDefaultConversion == null && !conversion.mTo.contentEquals(mFrom)) {
+            mDefaultConversion = conversion.mTo;
+        }
     }
 
     public HashMap<String,Double> getConversions() {
@@ -36,9 +39,8 @@ public class ConversionList {
     public double convert(final String to, final double valueToConvert) {
         final Double rate = mConvertToMap.get(to);
         if (rate == null) {
-            final Map.Entry<String, Double> firstEntry = mConvertToMap.entrySet().iterator().next();
-            Log.i(TAG,"no value for " + to + " in [" + mFrom + "] rates , returning conversion for " + firstEntry.getKey());
-            return firstEntry.getValue() * valueToConvert;
+            Log.i(TAG,"no value for " + to + " in [" + mFrom + "] rates , using conversion for " + mDefaultConversion);
+            return mConvertToMap.get(mDefaultConversion) * valueToConvert;
         }
         return valueToConvert * rate;
     }
