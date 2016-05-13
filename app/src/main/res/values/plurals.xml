@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="transactions">
+        <item quantity="one">one Transaction</item>
+        <item quantity="other">%d  Transactions</item>
+    </plurals>
+</resources>
